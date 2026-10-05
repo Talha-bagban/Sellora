@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { LocationsModule } from './locations/locations.module';
 import { AdsModule } from './ads/ads.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { AdsModule } from './ads/ads.module';
     AuthModule,
     CategoriesModule,
     LocationsModule,
-    AdsModule
+    AdsModule,
+    RedisModule
   ],
   controllers: [AppController],
   providers: [AppService],

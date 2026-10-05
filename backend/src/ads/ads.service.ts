@@ -17,6 +17,8 @@ import { AdStatus } from './enums/ad-status.enum';
 import { AdImage } from './ad-image.entity';
 import { join } from 'path';
 import { unlink } from 'fs/promises';
+import { RedisService } from '../redis/redis.service';
+import { RedisKeys } from '../redis/redis.keys';
 
 @Injectable()
 export class AdsService {
@@ -35,6 +37,8 @@ export class AdsService {
 
     @InjectRepository(AdImage)
     private readonly adImageRepository: Repository<AdImage>,
+
+    private readonly redisService: RedisService,
   ) {}
 
   async createAd(data: CreateAdDto, userId: string) {
@@ -78,6 +82,8 @@ export class AdsService {
       userId,
     });
 
+    await this.redisService.delByPattern(RedisKeys.ads.list);
+
     return this.adRepository.save(ad);
   }
 
@@ -92,6 +98,28 @@ export class AdsService {
     maxPrice?: number,
     sort = 'newest',
   ) {
+    const cacheKey = [
+      'ads:list',
+      `page=${page}`,
+      `limit=${limit}`,
+      `search=${search ?? ''}`,
+      `categoryId=${categoryId ?? ''}`,
+      `cityId=${cityId ?? ''}`,
+      `areaId=${areaId ?? ''}`,
+      `minPrice=${minPrice ?? ''}`,
+      `maxPrice=${maxPrice ?? ''}`,
+      `sort=${sort}`,
+    ].join(':');
+
+    const cachedAds = await this.redisService.get(cacheKey);
+
+    if (cachedAds) {
+      console.log(cacheKey, '🟢 Ads Redis CACHE HIT');
+      return JSON.parse(cachedAds);
+    }
+
+    console.log('🔴 Ads Redis CACHE MISS');
+
     const query = this.adRepository
       .createQueryBuilder('ad')
       .leftJoinAndSelect('ad.category', 'category')
@@ -121,7 +149,7 @@ export class AdsService {
     //   .skip((page - 1) * limit)
     //   .take(limit);
     // Pagination
-    
+
     query.skip((page - 1) * limit).take(limit);
 
     if (search) {
@@ -159,7 +187,7 @@ export class AdsService {
 
     const [ads, total] = await query.getManyAndCount();
 
-    return {
+    const result = {
       data: ads,
       meta: {
         page,
@@ -168,9 +196,36 @@ export class AdsService {
         totalPages: Math.ceil(total / limit),
       },
     };
+
+    await this.redisService.set(cacheKey, JSON.stringify(result), 900);
+
+    return result;
   }
 
   async findOne(id: string) {
+    const cacheKey = RedisKeys.ads.detail(id);
+
+    // 1. Check Redis
+    const cachedAd = await this.redisService.get(cacheKey);
+
+    if (cachedAd) {
+      console.log('🟢 Ad detail Redis CACHE HIT');
+
+      const ad = JSON.parse(cachedAd);
+
+      // Increment views in PostgreSQL
+      await this.adRepository.increment({ id }, 'views', 1);
+
+      ad.views += 1;
+
+      await this.redisService.set(cacheKey, JSON.stringify(ad), 300);
+
+      return ad;
+    }
+
+    console.log('🔴 Ad detail Redis CACHE MISS');
+
+    // 2. Cache miss → PostgreSQL
     const ad = await this.adRepository.findOne({
       where: { id },
       relations: {
@@ -185,8 +240,12 @@ export class AdsService {
       throw new NotFoundException('Ad not found');
     }
 
+    // 3. Increment views
     await this.adRepository.increment({ id }, 'views', 1);
     ad.views += 1;
+
+    // 4. Cache the result
+    await this.redisService.set(cacheKey, JSON.stringify(ad), 300);
 
     return ad;
   }
@@ -225,6 +284,10 @@ export class AdsService {
 
     Object.assign(ad, data);
 
+    await this.redisService.delByPattern(RedisKeys.ads.list);
+
+    await this.redisService.del(RedisKeys.ads.detail(id));
+
     return this.adRepository.save(ad);
   }
 
@@ -246,7 +309,7 @@ export class AdsService {
     });
 
     for (const image of images) {
-//   const filePath = join(process.cwd(), image.imageUrl);
+      //   const filePath = join(process.cwd(), image.imageUrl);
       const filePath = join(process.cwd(), image.imageUrl.replace(/^\/+/, ''));
 
       try {
@@ -257,6 +320,9 @@ export class AdsService {
     }
 
     await this.adRepository.remove(ad);
+
+    await this.redisService.delByPattern(RedisKeys.ads.list);
+    await this.redisService.del(RedisKeys.ads.detail(id));
 
     return {
       message: 'Ad deleted successfully',
@@ -278,7 +344,12 @@ export class AdsService {
 
     ad.status = status;
 
-    return this.adRepository.save(ad);
+    const updateStatusAd = await this.adRepository.save(ad);
+
+    await this.redisService.delByPattern(RedisKeys.ads.list);
+    await this.redisService.del(RedisKeys.ads.detail(id));
+
+    return updateStatusAd;
   }
 
   async findMyAds(userId: string, page = 1, limit = 20, status?: AdStatus) {

@@ -8,6 +8,8 @@ import { SubCategory } from './sub-category.entity';
 import { CreateSubCategoryDto } from './dto/create-sub-category.dto';
 import { LeafCategory } from './leaf-category.entity';
 import { CreateLeafCategoryDto } from './dto/create-leaf-category.dto';
+import { RedisService } from '../redis/redis.service';
+import { RedisKeys } from '../redis/redis.keys';
 
 @Injectable()
 export class CategoriesService {
@@ -20,22 +22,45 @@ export class CategoriesService {
 
     @InjectRepository(LeafCategory)
     private readonly leafCategoryRepository: Repository<LeafCategory>,
+
+    private readonly redisService: RedisService,
   ) {}
 
   async findAll() {
-    return this.parentCategoryRepository.find({
+    const cacheKey = RedisKeys.categories.all;
+
+    // 1. Check Redis
+    const cachedCategories = await this.redisService.get(cacheKey);
+    if (cachedCategories) {
+      console.log(cacheKey, '🟢 Redis CACHE HIT');
+      return JSON.parse(cachedCategories);
+    }
+    // 2. Cache miss → get data from PostgreSQL
+    
+    console.log('🔴 Redis CACHE MISS');
+    const categories = await this.parentCategoryRepository.find({
       relations: {
         subCategories: {
           leafCategories: true,
         },
       },
     });
+    // 3. Store result in Redis
+    await this.redisService.set(cacheKey, JSON.stringify(categories), 3600);
+    console.log('💾 Categories saved to Redis');
+
+    return categories;
   }
 
   async create(data: CreateParentCategoryDto) {
+
     const category = this.parentCategoryRepository.create(data);
 
-    return this.parentCategoryRepository.save(category);
+    const savedCategory = await this.parentCategoryRepository.save(category);
+
+    await this.redisService.del(RedisKeys.categories.all);
+
+    return savedCategory;
   }
   // async createSubCategory(data: CreateSubCategoryDto) {
   //     const category = this.subCategoryRepository.create(data);
@@ -43,6 +68,7 @@ export class CategoriesService {
   //     return this.subCategoryRepository.save(category);
   // }
   async createSubCategory(data: CreateSubCategoryDto) {
+
     const parent = await this.parentCategoryRepository.findOne({
       where: { id: data.parentId },
     });
@@ -53,7 +79,11 @@ export class CategoriesService {
 
     const category = this.subCategoryRepository.create(data);
 
-    return this.subCategoryRepository.save(category);
+    const savedCategory = await this.subCategoryRepository.save(category);
+
+    await this.redisService.del(RedisKeys.categories.all);
+
+    return savedCategory;
   }
   //   async createLeafCategory(data: CreateLeafCategoryDto) {
   //     const category = this.leafCategoryRepository.create(data);
@@ -71,6 +101,10 @@ export class CategoriesService {
 
     const category = this.leafCategoryRepository.create(data);
 
-    return this.leafCategoryRepository.save(category);
+    const savedCategory = await this.leafCategoryRepository.save(category);
+
+    await this.redisService.del(RedisKeys.categories.all);
+
+    return savedCategory;
   }
 }

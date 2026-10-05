@@ -63,7 +63,7 @@ const createAdSlice = createSlice({
       state.typeId = action.payload;
     },
 
-    setAdDetails: (
+    setAdDetails: ( 
       state,
       action: PayloadAction<{
         title: string;
@@ -87,12 +87,9 @@ const createAdSlice = createSlice({
       state.areaId = action.payload.areaId;
     },
 
-   setImages: (
-    state,
-    action: PayloadAction<AdImage[]>
-) => {
-    state.images = action.payload;
-},
+    setImages: (state, action: PayloadAction<AdImage[]>) => {
+      state.images = action.payload;
+    },
 
     setEditAdData: (
       state,

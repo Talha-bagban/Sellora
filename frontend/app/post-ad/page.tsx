@@ -46,7 +46,7 @@ export default function PostAdPage() {
     const {
         data: categories,
         isLoading,
-        isError,
+        isError,    
     } = useGetCategoriesQuery();
 
     const {

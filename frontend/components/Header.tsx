@@ -12,7 +12,6 @@ import Link from 'next/link';
 
 function Header() {
 
-
     const [showAuthModal, setShowAuthModal] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
 
@@ -90,7 +89,7 @@ function Header() {
                                     type="submit"
                                     aria-label="Submit search"
                                     className=" bg-blue-600 px-4 py-2 text-center
-                                     text-white hover:bg-blue-700" style={{ borderTopRightRadius: '7px', borderBottomRightRadius: '7px'}}
+                                     text-white hover:bg-blue-700" style={{ borderTopRightRadius: '7px', borderBottomRightRadius: '7px' }}
                                 >
                                     Search
                                 </button>
@@ -149,12 +148,12 @@ function Header() {
                                 </div>
                             ) : (
                                 <button className='cursor-pointer bg-gray-400 px-4 py-2 text-center text-white
-                                 hover:bg-gray-500' style={{borderRadius: '8px'}} onClick={() => setShowAuthModal(true)}>
+                                 hover:bg-gray-500' style={{ borderRadius: '8px' }} onClick={() => setShowAuthModal(true)}>
                                     Login / Register
                                 </button>
                             )}
                             <Link href='/post-ad' className=' bg-blue-600 px-4 py-2 text-center
-                                     text-white hover:bg-blue-700' style={{ borderRadius: '7px'}}> + Post Free Ad </Link>
+                                     text-white hover:bg-blue-700' style={{ borderRadius: '7px' }}> + Post Free Ad </Link>
                         </div>
 
                     </div>

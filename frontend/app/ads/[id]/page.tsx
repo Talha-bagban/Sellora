@@ -38,7 +38,8 @@ export default function AdDetailPage() {
 
   return (
     <main className="max-w-6xl mx-auto p-6">
-      <button
+      <div className='flex justify-between'>
+        <button
         type="button"
         onClick={() => router.back()}
         className="cursor-pointer mb-5 inline-flex items-center gap-2 rounded-lg border text-white border-gray-200 bg-blue-500 
@@ -60,7 +61,9 @@ export default function AdDetailPage() {
         </svg>
 
         Back
-      </button>
+      </button> 
+      <h3>Views: {ad.views}</h3>
+      </div>
       {ad.images?.length > 0 && (
         <img
           src={`http://localhost:3000${ad.images[0].imageUrl}`}
