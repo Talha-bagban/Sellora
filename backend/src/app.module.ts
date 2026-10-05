@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppController } from './app.controller.js';
+import { AppService } from './app.service.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
-import { CategoriesModule } from './categories/categories.module';
-import { LocationsModule } from './locations/locations.module';
-import { AdsModule } from './ads/ads.module';
-import { RedisModule } from './redis/redis.module';
+import { UsersModule } from './users/users.module.js';
+import { AuthModule } from './auth/auth.module.js';
+import { CategoriesModule } from './categories/categories.module.js';
+import { LocationsModule } from './locations/locations.module.js';
+import { AdsModule } from './ads/ads.module.js';
+import { RedisModule } from './redis/redis.module.js';
 
 @Module({
   imports: [

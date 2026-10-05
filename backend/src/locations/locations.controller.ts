@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
-import { LocationsService } from './locations.service';
-import { CreateCityDto } from './dto/create-city.dto';
-import { CreateAreaDto } from './dto/create-area.dto';
+import { LocationsService } from './locations.service.js';
+import { CreateCityDto } from './dto/create-city.dto.js';
+import { CreateAreaDto } from './dto/create-area.dto.js';
 
 @Controller('locations')
 export class LocationsController {

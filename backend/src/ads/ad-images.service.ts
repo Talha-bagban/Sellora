@@ -7,8 +7,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { AdImage } from './ad-image.entity';
-import { Ad } from './ad.entity';
+import { AdImage } from './ad-image.entity.js';
+import { Ad } from './ad.entity.js';
 import { randomUUID } from 'crypto';
 import { join } from 'path';
 import { writeFile } from 'fs/promises';

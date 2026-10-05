@@ -9,12 +9,12 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { User } from '../users/user.entity';
-import { LeafCategory } from '../categories/leaf-category.entity';
-import { City } from '../locations/city.entity';
-import { Area } from '../locations/area.entity';
-import { AdStatus } from './enums/ad-status.enum';
-import { AdImage } from './ad-image.entity';
+import type { User } from '../users/user.entity.js';
+import { LeafCategory } from '../categories/leaf-category.entity.js';
+import { City } from '../locations/city.entity.js';
+import { Area } from '../locations/area.entity.js';
+import { AdStatus } from './enums/ad-status.enum.js';
+import { AdImage } from './ad-image.entity.js';
 
 @Entity('ads')
 export class Ad {
@@ -54,15 +54,18 @@ export class Ad {
   @Column()
   userId: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne('User')
   @JoinColumn({ name: 'userId' })
   user: User;
+  // @ManyToOne(() => User)
+  // @JoinColumn({ name: 'userId' })
+  // user: User;
 
-  @Column({ 
+  @Column({
     type: 'enum',
     enum: AdStatus,
     default: AdStatus.ACTIVE,
-   })
+  })
   status: AdStatus;
 
   @Column({ default: 0 })
@@ -70,8 +73,8 @@ export class Ad {
 
   @OneToMany(() => AdImage, (image) => image.ad, {
     cascade: true,
-    })
-    images: AdImage[];
+  })
+  images: AdImage[];
 
   @CreateDateColumn()
   createdAt: Date;

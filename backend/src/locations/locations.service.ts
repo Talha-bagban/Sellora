@@ -2,10 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { City } from './city.entity';
-import { Area } from './area.entity';
-import { CreateCityDto } from './dto/create-city.dto';
-import { CreateAreaDto } from './dto/create-area.dto';
+import { City } from './city.entity.js';
+import { Area } from './area.entity.js';
+import { CreateCityDto } from './dto/create-city.dto.js';
+import { CreateAreaDto } from './dto/create-area.dto.js';
 
 @Injectable()
 export class LocationsService {

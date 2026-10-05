@@ -6,8 +6,8 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { City } from './city.entity';
-import { Ad } from '../ads/ad.entity';
+import type { City } from './city.entity.js';
+import { Ad } from '../ads/ad.entity.js';
 
 @Entity('areas')
 export class Area {
@@ -20,7 +20,7 @@ export class Area {
   @Column()
   cityId: string;
 
-  @ManyToOne(() => City, (city) => city.areas)
+@ManyToOne('City', (city: City) => city.areas)
   @JoinColumn({ name: 'cityId' })
   city: City;
 

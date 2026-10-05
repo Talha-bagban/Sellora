@@ -7,7 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { SubCategory } from './sub-category.entity';
+import type { SubCategory } from './sub-category.entity.js';
 // import { Ad } from '../ads/ad.entity';
 
 @Entity('leaf_categories')
@@ -24,7 +24,8 @@ export class LeafCategory {
   @Column()
   subCategoryId: string;
 
-  @ManyToOne(() => SubCategory, (subCategory) => subCategory.leafCategories)
+  // @ManyToOne(() => SubCategory, (subCategory) => subCategory.leafCategories)
+  @ManyToOne('SubCategory', (subCategory: SubCategory) => subCategory.leafCategories)
   @JoinColumn({ name: 'subCategoryId' })
   subCategory: SubCategory;
 

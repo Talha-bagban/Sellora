@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { SubCategory } from './sub-category.entity';
+import { SubCategory } from './sub-category.entity.js';
 
 @Entity('parent_categories')
 export class ParentCategory {

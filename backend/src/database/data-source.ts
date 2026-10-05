@@ -1,13 +1,13 @@
 import 'dotenv/config';
 import { DataSource } from 'typeorm';
-import { User } from '../users/user.entity';
-import { ParentCategory } from '../categories/parent-category.entity';
-import { SubCategory } from '../categories/sub-category.entity';
-import { LeafCategory } from '../categories/leaf-category.entity';
-import { City } from '../locations/city.entity';
-import { Area } from '../locations/area.entity';
-import { Ad } from '../ads/ad.entity';
-import { AdImage } from '../ads/ad-image.entity';
+import { User } from '../users/user.entity.js';
+import { ParentCategory } from '../categories/parent-category.entity.js';
+import { SubCategory } from '../categories/sub-category.entity.js';
+import { LeafCategory } from '../categories/leaf-category.entity.js';
+import { City } from '../locations/city.entity.js';
+import { Area } from '../locations/area.entity.js';
+import { Ad } from '../ads/ad.entity.js';
+import { AdImage } from '../ads/ad-image.entity.js';
 
 const dataSource = new DataSource({
   type: 'postgres',

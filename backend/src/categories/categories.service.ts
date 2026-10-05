@@ -2,14 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { ParentCategory } from './parent-category.entity';
-import { CreateParentCategoryDto } from './dto/create-parent-category.dto';
-import { SubCategory } from './sub-category.entity';
-import { CreateSubCategoryDto } from './dto/create-sub-category.dto';
-import { LeafCategory } from './leaf-category.entity';
-import { CreateLeafCategoryDto } from './dto/create-leaf-category.dto';
-import { RedisService } from '../redis/redis.service';
-import { RedisKeys } from '../redis/redis.keys';
+import { ParentCategory } from './parent-category.entity.js';
+import { CreateParentCategoryDto } from './dto/create-parent-category.dto.js';
+import { SubCategory } from './sub-category.entity.js';
+import { CreateSubCategoryDto } from './dto/create-sub-category.dto.js';
+import { LeafCategory } from './leaf-category.entity.js';
+import { CreateLeafCategoryDto } from './dto/create-leaf-category.dto.js';
+import { RedisService } from '../redis/redis.service.js';
+import { RedisKeys } from '../redis/redis.keys.js';
 
 @Injectable()
 export class CategoriesService {

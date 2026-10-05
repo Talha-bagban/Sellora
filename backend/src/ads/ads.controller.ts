@@ -14,14 +14,14 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 
-import { AdsService } from './ads.service';
-import { CreateAdDto } from './dto/create-ad.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UpdateAdDto } from './dto/update-ad.dto';
-import { UpdateAdStatusDto } from './dto/update-ad-status.dto';
-import { AdStatus } from './enums/ad-status.enum';
-import { AdImagesService } from './ad-images.service';
-import { UpdateImageOrderDto } from './dto/update-image-order.dto';
+import { AdsService } from './ads.service.js';
+import { CreateAdDto } from './dto/create-ad.dto.js';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
+import { UpdateAdDto } from './dto/update-ad.dto.js';
+import { UpdateAdStatusDto } from './dto/update-ad-status.dto.js';
+import { AdStatus } from './enums/ad-status.enum.js';
+import { AdImagesService } from './ad-images.service.js';
+import { UpdateImageOrderDto } from './dto/update-image-order.dto.js';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('ads')

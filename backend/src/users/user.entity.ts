@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { Ad } from '../ads/ad.entity';
+import { Ad } from '../ads/ad.entity.js';
 
 @Entity('users')
 export class User {

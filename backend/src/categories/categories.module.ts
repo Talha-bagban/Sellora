@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { CategoriesController } from './categories.controller';
-import { CategoriesService } from './categories.service';
+import { CategoriesController } from './categories.controller.js';
+import { CategoriesService } from './categories.service.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ParentCategory } from './parent-category.entity';
-import { SubCategory } from './sub-category.entity';
-import { LeafCategory } from './leaf-category.entity';
+import { ParentCategory } from './parent-category.entity.js';
+import { SubCategory } from './sub-category.entity.js';
+import { LeafCategory } from './leaf-category.entity.js';
 
 @Module({
   imports: [

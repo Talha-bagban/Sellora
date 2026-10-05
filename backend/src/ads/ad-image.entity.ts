@@ -7,7 +7,7 @@ import {
   Unique,
 } from 'typeorm';
 
-import { Ad } from './ad.entity';
+import type { Ad } from './ad.entity.js';
 
 @Unique(['adId', 'sortOrder'])
 @Entity('ad_images')
@@ -18,9 +18,10 @@ export class AdImage {
   @Column()
   adId: string;
 
-  @ManyToOne(() => Ad, (ad) => ad.images, {
+  @ManyToOne('Ad', (ad: Ad) => ad.images, {
     onDelete: 'CASCADE',
   })
+
   @JoinColumn({ name: 'adId' })
   ad: Ad;
 

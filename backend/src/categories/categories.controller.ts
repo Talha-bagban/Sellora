@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CategoriesService } from './categories.service';
-import { CreateParentCategoryDto } from './dto/create-parent-category.dto';
-import { CreateSubCategoryDto } from './dto/create-sub-category.dto';
-import { CreateLeafCategoryDto } from './dto/create-leaf-category.dto';
+import { CategoriesService } from './categories.service.js';
+import { CreateParentCategoryDto } from './dto/create-parent-category.dto.js';
+import { CreateSubCategoryDto } from './dto/create-sub-category.dto.js';
+import { CreateLeafCategoryDto } from './dto/create-leaf-category.dto.js';
 
 @Controller('categories')
 export class CategoriesController {

@@ -4,8 +4,8 @@ import {
   Column,
   OneToMany,
 } from 'typeorm';
-import { Area } from './area.entity'
-import { Ad } from '../ads/ad.entity';
+import { Area } from './area.entity.js'
+import { Ad } from '../ads/ad.entity.js';
 
 @Entity('cities')
 export class City {

@@ -7,18 +7,18 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Ad } from './ad.entity';
-import { LeafCategory } from '../categories/leaf-category.entity';
-import { City } from '../locations/city.entity';
-import { Area } from '../locations/area.entity';
-import { CreateAdDto } from './dto/create-ad.dto';
-import { UpdateAdDto } from './dto/update-ad.dto';
-import { AdStatus } from './enums/ad-status.enum';
-import { AdImage } from './ad-image.entity';
+import { Ad } from './ad.entity.js';
+import { LeafCategory } from '../categories/leaf-category.entity.js';
+import { City } from '../locations/city.entity.js';
+import { Area } from '../locations/area.entity.js';
+import { CreateAdDto } from './dto/create-ad.dto.js';
+import { UpdateAdDto } from './dto/update-ad.dto.js';
+import { AdStatus } from './enums/ad-status.enum.js';
+import { AdImage } from './ad-image.entity.js';
 import { join } from 'path';
 import { unlink } from 'fs/promises';
-import { RedisService } from '../redis/redis.service';
-import { RedisKeys } from '../redis/redis.keys';
+import { RedisService } from '../redis/redis.service.js';
+import { RedisKeys } from '../redis/redis.keys.js';
 
 @Injectable()
 export class AdsService {
