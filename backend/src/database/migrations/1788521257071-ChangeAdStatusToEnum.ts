@@ -1,4 +1,5 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import type { QueryRunner } from "typeorm";
+import type { MigrationInterface } from "typeorm";
 
 export class ChangeAdStatusToEnum1788521257071 implements MigrationInterface {
     name = 'ChangeAdStatusToEnum1788521257071'

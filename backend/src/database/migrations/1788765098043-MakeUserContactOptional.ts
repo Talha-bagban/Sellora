@@ -1,4 +1,5 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import type { QueryRunner } from "typeorm";
+import type { MigrationInterface } from "typeorm";
 
 export class MakeUserContactOptional1788765098043 implements MigrationInterface {
     name = 'MakeUserContactOptional1788765098043'

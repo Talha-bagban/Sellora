@@ -11,13 +11,33 @@ import { AdImage } from '../ads/ad-image.entity.js';
 
 const dataSource = new DataSource({
   type: 'postgres',
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
+  url: process.env.DATABASE_URL || undefined,
 
-  entities: [User, ParentCategory,SubCategory, LeafCategory, City, Area, Ad, AdImage],
+  host: process.env.DATABASE_URL ? undefined : process.env.DB_HOST,
+
+  port: process.env.DATABASE_URL ? undefined : Number(process.env.DB_PORT),
+
+  username: process.env.DATABASE_URL ? undefined : process.env.DB_USERNAME,
+
+  password: process.env.DATABASE_URL ? undefined : process.env.DB_PASSWORD,
+
+  database: process.env.DATABASE_URL ? undefined : process.env.DB_DATABASE,
+  // host: process.env.DB_HOST,
+  // port: Number(process.env.DB_PORT),
+  // username: process.env.DB_USERNAME,
+  // password: process.env.DB_PASSWORD,
+  // database: process.env.DB_DATABASE,
+
+  entities: [
+    User,
+    ParentCategory,
+    SubCategory,
+    LeafCategory,
+    City,
+    Area,
+    Ad,
+    AdImage,
+  ],
 
   migrations: ['src/database/migrations/*.ts'],
 });

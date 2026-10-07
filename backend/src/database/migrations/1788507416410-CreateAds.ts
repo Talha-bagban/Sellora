@@ -1,4 +1,5 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import type { QueryRunner } from "typeorm";
+import type { MigrationInterface } from "typeorm";
 
 export class CreateAds1788507416410 implements MigrationInterface {
     name = 'CreateAds1788507416410'

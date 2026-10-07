@@ -1,4 +1,5 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import type { QueryRunner } from "typeorm";
+import type { MigrationInterface } from "typeorm";
 
 export class CreateAdImages1788522864870 implements MigrationInterface {
     name = 'CreateAdImages1788522864870'
