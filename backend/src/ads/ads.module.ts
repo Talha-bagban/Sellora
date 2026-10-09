@@ -11,6 +11,7 @@ import { Area } from '../locations/area.entity.js';
 import { AdsController } from './ads.controller.js';
 import { AdImage } from './ad-image.entity.js';
 import { AdImagesService } from './ad-images.service.js';
+import { CloudinaryModule } from '../cloudinary/cloudinary.module.js';
 
 @Module({
   imports: [
@@ -19,9 +20,10 @@ import { AdImagesService } from './ad-images.service.js';
       AdImage,
       LeafCategory,
       City,
-      Area,
+      Area
     ]),
-    AuthModule
+    AuthModule,
+    CloudinaryModule
   ],
   controllers: [AdsController],
   providers: [AdsService, AdImagesService],

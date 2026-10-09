@@ -12,6 +12,8 @@ import { Ad } from './ad.entity.js';
 import { randomUUID } from 'crypto';
 import { join } from 'path';
 import { writeFile } from 'fs/promises';
+import { CloudinaryService } from '../cloudinary/cloudinary.service.js';
+import { unlink } from 'fs/promises';
 
 @Injectable()
 export class AdImagesService {
@@ -20,6 +22,8 @@ export class AdImagesService {
     private readonly adImageRepository: Repository<AdImage>,
     @InjectRepository(Ad)
     private readonly adRepository: Repository<Ad>,
+
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   //   async createImage(
@@ -89,6 +93,21 @@ export class AdImagesService {
 
     if (image.ad.userId !== userId) {
       throw new ForbiddenException('You are not allowed to delete this image');
+    }
+
+    if (process.env.NODE_ENV === 'production') {
+      if (image.cloudinaryPublicId) {
+        await this.cloudinaryService.deleteImage(image.cloudinaryPublicId);
+      }
+    } else {
+      // Local → delete from local filesystem
+      const filePath = join(process.cwd(), image.imageUrl.replace(/^\/+/, ''));
+
+      try {
+        await unlink(filePath);
+      } catch {
+        // File may already be missing
+      }
     }
 
     await this.adImageRepository.remove(image);
@@ -208,15 +227,35 @@ export class AdImagesService {
       throw new BadRequestException('An ad can have a maximum of 10 images');
     }
 
-    const fileName = `${randomUUID()}-${file.originalname}`;
+    let imageUrl: string;
+    let cloudinaryPublicId: string | null = null;
 
-    const filePath = join(process.cwd(), 'uploads', 'ads', fileName);
+    console.log('NODE_ENV:', process.env.NODE_ENV);
+    
+    if (process.env.NODE_ENV === 'production') {
+      // Production → Cloudinary
+      const result: any = await this.cloudinaryService.uploadImage(
+        file.buffer,
+        'sellora/ads',
+      );
 
-    await writeFile(filePath, file.buffer);
+      imageUrl = result.secure_url;
+      cloudinaryPublicId = result.public_id;
+    } else {
+      // Local development → local filesystem
+      const fileName = `${randomUUID()}-${file.originalname}`;
+
+      const filePath = join(process.cwd(), 'uploads', 'ads', fileName);
+
+      await writeFile(filePath, file.buffer);
+
+      imageUrl = `/uploads/ads/${fileName}`;
+    }
 
     const image = this.adImageRepository.create({
       adId,
-      imageUrl: `/uploads/ads/${fileName}`,
+      imageUrl,
+      cloudinaryPublicId,
       sortOrder: imageCount,
     });
 

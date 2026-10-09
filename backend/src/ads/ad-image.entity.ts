@@ -28,6 +28,9 @@ export class AdImage {
   @Column()
   imageUrl: string;
 
+  @Column({ type: 'varchar', nullable: true })
+  cloudinaryPublicId: string | null;
+
   @Column({ default: 0 })
   sortOrder: number;
 }
