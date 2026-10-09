@@ -1,3 +1,4 @@
+import { getImageUrl } from '@/lib/get-image-url';
 import { Ad } from '@/types/ad';
 import { useRouter } from 'next/navigation';
 
@@ -77,7 +78,7 @@ export default function AdCard({ ad }: AdCardProps) {
     <div className="relative h-52 w-full overflow-hidden bg-gray-100">
         {image ? (
             <img
-                src={`http://localhost:3000${image}`}
+                src={getImageUrl(image)}
                 alt={ad.title}
                 className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
